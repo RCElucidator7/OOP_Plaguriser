@@ -3,10 +3,11 @@ import java.util.Scanner;
 
 public class menu {
 
-	private boolean alive = true
+	private boolean alive = true;
 	
-	while(alive)
-	{
+
+	public void show() {
+		// TODO Auto-generated method stub
 		
 	}
 }

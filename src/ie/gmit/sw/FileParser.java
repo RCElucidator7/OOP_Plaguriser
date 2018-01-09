@@ -7,28 +7,36 @@ import java.util.concurrent.*;
 public class FileParser implements Runnable {
 	private BlockingQueue<Shingle>queue;
 	private String file;
-	private int shignleSize, k;
+	private int shingleSize, k;
 	private Deque<String> buffer = new LinkedList<>();
 	private int docId;	
 
-	public FileParser(String file, BlockingQueue<Shingles>q, int shingleSize, int k) {
+	public FileParser(String file, BlockingQueue<Shingle>q, int shingleSize, int k) {
 		this.queue = q;
 		//...
 		//...
 	}
 	
 	public void run() {
-		BufferedReader br = new BufferedReader(new InputStringReader(new FileInputString(file)));
-		String line = null;
-		while((line = br.readLine()) != null) {
-			String uLine = line.toUpperCase();
-			String[] words = uLine.split(" "); // Can also take a regexpression
-			addWordsToBuffer(words);
-			Shingle s = getNextShingle();
-			queue.put(s); // Blocking method. Add is not a blocking method
-		}
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+			String line = null;
+			while((line = br.readLine()) != null) {
+				String uLine = line.toUpperCase();
+				String[] words = uLine.split(" "); // Can also take a regexpression
+				addWordsToBuffer(words);
+				Shingle s = getNextShingle();
+				queue.put(s); // Blocking method. Add is not a blocking method
+			}
 		flushBuffer();
 		br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}// Run
 
 
@@ -48,8 +56,8 @@ public class FileParser implements Runnable {
 				counter++;
 			}
 		}  
-		if (sb.length > 0) {
-			return(new Shingle(docId, sb.toString().hashCode());
+		if (sb.length() > 0) {
+			return(new Shingle(docId, sb.toString().hashCode()));
 		}
 		else {
 			return(null);
@@ -59,12 +67,22 @@ public class FileParser implements Runnable {
 
 	private void flushBuffer() {
 		while(buffer.size() > 0) {
-			Sh(Single s = getNextShingle();
+			Shingle s = getNextShingle();
 			if(s != null) {
-				queue.put(s);
+				try {
+					queue.put(s);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else {
-				queue.put(new Poison(docId, 0));
+				try {
+					queue.put(new Poison(docId, 0));
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
