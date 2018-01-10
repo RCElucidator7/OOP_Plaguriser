@@ -7,14 +7,15 @@ import java.util.concurrent.*;
 public class FileParser implements Runnable {
 	private BlockingQueue<Shingle>queue;
 	private String file;
-	private int shingleSize, k;
+	private int shingleSize/*, k*/;
 	private Deque<String> buffer = new LinkedList<>();
 	private int docId;	
 
-	public FileParser(String file, BlockingQueue<Shingle>q, int shingleSize, int k) {
+	public FileParser(String file, BlockingQueue<Shingle>q, int shingleSize/*, int k*/) {
 		this.queue = q;
-		//...
-		//...
+		this.file = file;
+		this.shingleSize = shingleSize;
+		//this.k = k;
 	}
 	
 	public void run() {
@@ -23,6 +24,7 @@ public class FileParser implements Runnable {
 			String line = null;
 			while((line = br.readLine()) != null) {
 				String uLine = line.toUpperCase();
+				System.out.println(uLine);
 				String[] words = uLine.split(" "); // Can also take a regexpression
 				addWordsToBuffer(words);
 				Shingle s = getNextShingle();
@@ -32,6 +34,7 @@ public class FileParser implements Runnable {
 		br.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Error file " + file + " not found, please try again.");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -44,7 +47,6 @@ public class FileParser implements Runnable {
 		for(String s : words) {
 			buffer.add(s);
 		}
- 
        }
 
  	private Shingle getNextShingle() {
