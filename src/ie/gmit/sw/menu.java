@@ -1,6 +1,10 @@
 package ie.gmit.sw;
 import java.util.Scanner;
-
+/**
+ * Menu class displays all nessessary values and reads in user input values
+ * @author Ryan Conway
+ *
+ */
 public class menu {
 
 	private boolean keepRunning = true;

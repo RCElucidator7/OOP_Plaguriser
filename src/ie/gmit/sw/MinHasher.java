@@ -13,7 +13,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import ie.gmit.sw.Shingle;
-
+/**
+ * runs the MinHasher, taking in queues and converting Shingles and their data 
+ * and stores them in a map 
+ * @author Ryan Conway
+ * 
+ * @see run
+ */
 public class MinHasher implements Runnable {
 
 	private BlockingQueue<Shingle> q;
@@ -23,13 +29,21 @@ public class MinHasher implements Runnable {
 	private int hashCount;
 	int fileCount = 2;
 
+	/**
+	 * Constructor for the MinHasher
+	 * @param q blocking queue
+	 * @param k hashcount
+	 */
 	public MinHasher(BlockingQueue<Shingle> q, int k) {
 		this.q = q;
 		this.hashCount = k;
 		pool = Executors.newFixedThreadPool(k);
 		init();
 	}
-
+	
+	/**
+	 * Generates random number for hashing shingle data
+	 */
 	public void init() {
 		minHash = new TreeSet<Integer>();
 
@@ -39,7 +53,7 @@ public class MinHasher implements Runnable {
 			minHash.add(randInt.nextInt());
 		}
 	}
-
+	
 	@Override
 	public void run() {
 		//Declare lists
@@ -97,6 +111,10 @@ public class MinHasher implements Runnable {
 		menu.showResults(jac);
 	}
 
+	/**
+	 * Shuts down pool
+	 * @param pool pool
+	 */
 	void shutdownAndAwaitTermination(ExecutorService pool) {
 		pool.shutdown(); // Disable new tasks from being submitted
 		try {
@@ -112,7 +130,11 @@ public class MinHasher implements Runnable {
 			Thread.currentThread().interrupt();
 		}
 	}
-	
+	/**
+	 * Takes in Shingle and converts it to hash
+	 * @param s Shingle
+	 * @return hashcode value
+	 */
 	public synchronized int hashing(Shingle s) {
 		//XOR the integer word values with the hashes
 		int minValue = Integer.MAX_VALUE;

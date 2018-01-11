@@ -1,12 +1,22 @@
 package ie.gmit.sw;
 
+/**
+ * Jacrad class for calculating percentage, extends Comparer
+ * @author Ryan Conway
+ *
+ */
 public class Jacard extends Comparer {
 	private final int intersect;
 	private final int setA;
 	private final int setB;
 	private float jaccard;
 
-	//Jacrad class for calculating percentage
+	/**
+	 * Constructor for Jacard
+	 * @param intersect intersection point
+	 * @param setA list 1
+	 * @param setB list 2
+	 */
 	public Jacard(int intersect, int setA, int setB) {
 		super(intersect, setA, setB);
 		this.intersect = intersect;
@@ -14,6 +24,9 @@ public class Jacard extends Comparer {
 		this.setB = setB;
 	}
 
+	/**
+	 * Calculates the jacard by taking in set values
+	 */
 	@Override
 	public float calcJac() {
 		

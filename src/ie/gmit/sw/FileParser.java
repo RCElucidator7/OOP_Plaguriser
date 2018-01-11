@@ -3,7 +3,11 @@ package ie.gmit.sw;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
-
+/**
+ * Parses the .txt files that the user has input and assigns them to a String array
+ * @author Ryan Conway
+ *
+ */
 public class FileParser implements Runnable {
 	private BlockingQueue<Shingle>queue;
 	private String file;
@@ -11,6 +15,13 @@ public class FileParser implements Runnable {
 	private Deque<String> buffer = new LinkedList<String>();
 	private int docId;	
 
+	/**
+	 * Comstructor for file parser
+	 * @param file file name
+	 * @param q Blocking queue size
+	 * @param shingleSize Size of Shingle
+	 * @param k File ID
+	 */
 	public FileParser(String file, BlockingQueue<Shingle>q, int shingleSize, int k) {
 		this.queue = q;
 		this.file = file;
@@ -51,7 +62,10 @@ public class FileParser implements Runnable {
 		}
 	}
 
-
+	/**
+	 * adds words to the array
+	 * @param words adds words to the array
+	 */
 	private void addWordsToBuffer(String [] words) {
 		//Add read words from file to buffer
 		for(String s : words) {
@@ -59,6 +73,10 @@ public class FileParser implements Runnable {
 		}
     }
 
+	/**
+	 * Gets the next shingle
+	 * @return Shingle
+	 */
  	private Shingle getNextShingle() {
  		//Gets shingles
 		StringBuffer sb = new StringBuffer();
@@ -80,7 +98,10 @@ public class FileParser implements Runnable {
 		}
  	}
 	
-
+ 	/**
+ 	 * Flushes the buffer
+ 	 * @throws InterruptedException
+ 	 */
  	private void flushBuffer() throws InterruptedException {
 		while (buffer.size() > 0) {
 			Shingle s = getNextShingle();

@@ -1,9 +1,13 @@
 package ie.gmit.sw;
 
 import java.util.concurrent.*;
-
+/**
+ * Initalises blocking queue and threads
+ * then starts and joins the threads
+ * @author Ryan Conway
+ *
+ */
 public class Launcher {
-	
 	
 	public void Launch(String f1, String f2, int shingleSize, int blockingQueueSize) {
 		//initalise blocking queue
