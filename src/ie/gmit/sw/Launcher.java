@@ -26,6 +26,7 @@ public class Launcher {
 			e.printStackTrace();
 		}
 		
+		//Start comparison thread
 		Thread t3 = new Thread(new MinHasher(q,shingleSize),"T3");
 		t3.start();
 		try {

@@ -20,6 +20,7 @@ public class FileParser implements Runnable {
 	
 	public void run() {
 		try {
+			//Read files
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 			String line = null;
 			while((line = br.readLine()) != null) {
@@ -48,16 +49,18 @@ public class FileParser implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}// Run
+	}
 
 
 	private void addWordsToBuffer(String [] words) {
+		//Add read words from file to buffer
 		for(String s : words) {
 			buffer.add(s);
 		}
     }
 
  	private Shingle getNextShingle() {
+ 		//Gets shingles
 		StringBuffer sb = new StringBuffer();
 		int counter = 0;
 		while(counter < shingleSize) {
@@ -75,7 +78,7 @@ public class FileParser implements Runnable {
 		else {
 			return(null);
 		}
- 	} // Next shingle
+ 	}
 	
 
  	private void flushBuffer() throws InterruptedException {
@@ -85,8 +88,8 @@ public class FileParser implements Runnable {
 				queue.put(s);
 			}
 		}
+		//Set poison
 		queue.put(new Poison(0, 0));
-}
-
+ 	}
        
- }// Document Parser
+}
