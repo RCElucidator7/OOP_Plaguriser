@@ -1,5 +1,6 @@
-//Ryan Conway
-//ID - G00332826
+Ryan Conway
+ID - G00332826
+Github URL - https://github.com/RCElucidator7/OOP_Plaguriser
 
 Overview
 ==========
