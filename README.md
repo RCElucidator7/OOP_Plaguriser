@@ -36,4 +36,7 @@ be prompted to enter the file name, second file name, ammount of Shingles and th
 of the blocking queue. Once entered the program will run and display the ammount of 
 Shingles in file 1 and file 2, the ammount of comparisons and the percentage of likeness.
 
+When running the .jar file, .txt files must be in the bin directory. If running project 
+through eclipse, .txt files must be in the project folder.
+
 If any problems occur please email.
