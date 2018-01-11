@@ -84,7 +84,6 @@ public class MinHasher implements Runnable {
 							}
 						}
 					});// Runnable
-					System.out.println(fileCount);
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
