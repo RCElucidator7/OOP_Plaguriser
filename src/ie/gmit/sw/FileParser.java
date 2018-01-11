@@ -8,14 +8,14 @@ public class FileParser implements Runnable {
 	private BlockingQueue<Shingle>queue;
 	private String file;
 	private int shingleSize/*, k*/;
-	private Deque<String> buffer = new LinkedList<>();
+	private Deque<String> buffer = new LinkedList<String>();
 	private int docId;	
 
-	public FileParser(String file, BlockingQueue<Shingle>q, int shingleSize/*, int k*/) {
+	public FileParser(String file, BlockingQueue<Shingle>q, int shingleSize, int k) {
 		this.queue = q;
 		this.file = file;
 		this.shingleSize = shingleSize;
-		//this.k = k;
+		this.docId = k;
 	}
 	
 	public void run() {
@@ -23,13 +23,21 @@ public class FileParser implements Runnable {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
 			String line = null;
 			while((line = br.readLine()) != null) {
-				String uLine = line.toUpperCase();
-				System.out.println(uLine);
-				String[] words = uLine.split(" "); // Can also take a regexpression
-				addWordsToBuffer(words);
-				Shingle s = getNextShingle();
-				queue.put(s); // Blocking method. Add is not a blocking method
+				if(line.length() > 0){	
+					String uLine = line.toUpperCase();
+					System.out.println(uLine);
+					String[] words = uLine.split(" ");
+					addWordsToBuffer(words);
+				}
 			}
+			while (buffer.size() != 0) {
+				Shingle s = getNextShingle();
+				if(s != null){
+					queue.put(s); // Blocking method. Add is not a blocking method
+				}
+			}
+		
+		System.out.println("Done" + docId);
 		flushBuffer();
 		br.close();
 		} catch (IOException e) {
@@ -47,7 +55,7 @@ public class FileParser implements Runnable {
 		for(String s : words) {
 			buffer.add(s);
 		}
-       }
+    }
 
  	private Shingle getNextShingle() {
 		StringBuffer sb = new StringBuffer();
@@ -56,6 +64,9 @@ public class FileParser implements Runnable {
 			if(buffer.peek() != null) {
 				sb.append(buffer.poll());
 				counter++;
+			}
+			else{
+				counter = shingleSize;
 			}
 		}  
 		if (sb.length() > 0) {
@@ -67,27 +78,15 @@ public class FileParser implements Runnable {
  	} // Next shingle
 	
 
-	private void flushBuffer() {
-		while(buffer.size() > 0) {
+ 	private void flushBuffer() throws InterruptedException {
+		while (buffer.size() > 0) {
 			Shingle s = getNextShingle();
-			if(s != null) {
-				try {
-					queue.put(s);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			else {
-				try {
-					queue.put(new Poison(docId, 0));
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			if (s != null) {
+				queue.put(s);
 			}
 		}
-	}
+		queue.put(new Poison(0, 0));
+}
 
        
  }// Document Parser
